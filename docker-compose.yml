@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: wfh_postgres
+    ports:
+      - "6598:5432"
+    environment:
+      POSTGRES_DB: new_employee_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build: ./Backend
+    container_name: wfh_backend
+    ports:
+      - "3038:3038"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: admin123
+      DB_NAME: new_employee_db
+      FRONTEND_URL: http://localhost:8130
+    volumes:
+      - ./Backend:/app
+
+  frontend:
+    build: ./Frontend
+    container_name: wfh_frontend
+    ports:
+      - "8130:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./Frontend:/usr/share/nginx/html
+    image: nginx:alpine
+
+  hr_page:
+    build: ./HR_page
+    container_name: wfh_hr_page
+    ports:
+      - "8131:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./HR_page:/usr/share/nginx/html
+    image: nginx:alpine
+
+volumes:
+  postgres_data:
+
