@@ -5,7 +5,7 @@ services:
     image: postgres:13
     container_name: wfh_postgres
     ports:
-      - "6598:5432"
+      - "6617:5432"
     environment:
       POSTGRES_DB: new_employee_db
       POSTGRES_USER: postgres
@@ -18,7 +18,7 @@ services:
     build: ./Backend
     container_name: wfh_backend
     ports:
-      - "3038:3038"
+      - "3058:3058"
     depends_on:
       - postgres
     environment:
@@ -27,7 +27,7 @@ services:
       DB_USER: postgres
       DB_PASSWORD: admin123
       DB_NAME: new_employee_db
-      FRONTEND_URL: http://localhost:8130
+      FRONTEND_URL: http://localhost:8174
     volumes:
       - ./Backend:/app
 
@@ -35,7 +35,7 @@ services:
     build: ./Frontend
     container_name: wfh_frontend
     ports:
-      - "8130:80"
+      - "8174:80"
     depends_on:
       - backend
     volumes:
@@ -46,7 +46,7 @@ services:
     build: ./HR_page
     container_name: wfh_hr_page
     ports:
-      - "8131:80"
+      - "8175:80"
     depends_on:
       - backend
     volumes:
