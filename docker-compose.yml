@@ -2,57 +2,51 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:13
-    container_name: wfh_postgres
-    ports:
-      - "6617:5432"
+    image: postgres:14
+    container_name: postgres-wfh1
     environment:
-      POSTGRES_DB: new_employee_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: new_employee_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "6617:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build: ./Backend
-    container_name: wfh_backend
+    container_name: backend-wfh1
     ports:
       - "3058:3058"
-    depends_on:
-      - postgres
     environment:
-      DB_HOST: postgres
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: admin123
-      DB_NAME: new_employee_db
-      FRONTEND_URL: http://localhost:8174
-    volumes:
-      - ./Backend:/app
+      - PORT=3406
+      - DB_USER=postgres
+      - DB_HOST=postgres
+      - DB_NAME=new_employee_db
+      - DB_PASSWORD=admin123
+      - DB_PORT=5432
+      - FRONTEND_URL=http://13.203.228.93:8174
+    depends_on:
+      postgres:
+        condition: service_healthy
 
   frontend:
     build: ./Frontend
-    container_name: wfh_frontend
+    container_name: frontend-wfh1
     ports:
       - "8174:80"
-    depends_on:
-      - backend
-    volumes:
-      - ./Frontend:/usr/share/nginx/html
-    image: nginx:alpine
 
   hr_page:
     build: ./HR_page
-    container_name: wfh_hr_page
+    container_name: hrpage-wfh1
     ports:
       - "8175:80"
-    depends_on:
-      - backend
-    volumes:
-      - ./HR_page:/usr/share/nginx/html
-    image: nginx:alpine
 
 volumes:
   postgres_data:
-
