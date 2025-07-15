@@ -25,7 +25,7 @@ services:
     ports:
       - "3058:3058"
     environment:
-      - PORT=3406
+      - PORT=3058
       - DB_USER=postgres
       - DB_HOST=postgres
       - DB_NAME=new_employee_db
