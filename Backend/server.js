@@ -19,14 +19,14 @@ const pool = new Pool({
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || '*', // Allow environment variable or all origins for testing
-    'http://13.203.228.93:3058',
+    'http://13.201.102.139:3058',
     'http://127.0.0.1:5500',
-    'http://13.203.228.93:5500',
+    'http://13.201.102.139:5500',
     'http://127.0.0.1:5501',
     'http://127.0.0.1:5503',
-    'http://13.203.228.93:5503',
-    'http://13.203.228.93:8174',
-    'http://13.203.228.93:8175'
+    'http://13.201.102.139:5503',
+    'http://13.201.102.139:8174',
+    'http://13.201.102.139:8175'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
