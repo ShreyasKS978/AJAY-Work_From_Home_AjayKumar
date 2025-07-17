@@ -31,7 +31,7 @@ services:
       - DB_NAME=new_employee_db
       - DB_PASSWORD=admin123
       - DB_PORT=5432
-      - FRONTEND_URL=http://13.203.228.93:8174
+      - FRONTEND_URL=http://13.201.102.139:8174
     depends_on:
       postgres:
         condition: service_healthy
